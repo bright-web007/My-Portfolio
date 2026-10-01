@@ -27,6 +27,7 @@ export default function StartScreen() {
         </span>
       </h1>
       <button
+        data-cursor="LET'S GET YOU STARTED"
         onClick={start}
         className={`${mono.className} bg-[#FFB84A] px-10 py-4 text-sm font-bold text-[#05080d] transition hover:bg-[#ffd07f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white`}
       >

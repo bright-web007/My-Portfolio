@@ -4,3 +4,28 @@ body {
   background: #05080d;
   color: #eaf0f2;
 }
+
+/* Custom cursor: only applied once Cursor.tsx has loaded */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+html.has-cursor input,
+html.has-cursor textarea {
+  cursor: text !important;
+}
+
+.stitch {
+  transform: translate(-50%, -50%);
+  animation: stitch 0.65s ease-out forwards;
+}
+@keyframes stitch {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.7) rotate(45deg);
+  }
+}
