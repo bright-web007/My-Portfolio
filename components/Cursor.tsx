@@ -26,14 +26,25 @@ export default function Cursor() {
         let tx = 0, ty = 0, rx = 0, ry = 0, raf = 0;
         let first = true;
         let overText = false;
+        let cursorVisible = false;
+        let currentHover = false;
+        let currentLabel = "";
 
         const tick = () => {
             const k = reduce ? 1 : 0.18;
-            rx += (tx - rx) * k;
-            ry += (ty - ry) * k;
+            const dx = tx - rx;
+            const dy = ty - ry;
+            rx += dx * k;
+            ry += dy * k;
             if (ring.current) ring.current.style.transform = `translate3d(${rx}px,${ry}px,0)`;
             if (dot.current) dot.current.style.transform = `translate3d(${tx}px,${ty}px,0)`;
-            raf = requestAnimationFrame(tick);
+            raf = Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05
+                ? requestAnimationFrame(tick)
+                : 0;
+        };
+
+        const scheduleTick = () => {
+            if (!raf) raf = requestAnimationFrame(tick);
         };
 
         const onMove = (e: PointerEvent) => {
@@ -44,7 +55,11 @@ export default function Cursor() {
                 ry = ty;
                 first = false;
             }
-            if (!overText) setVisible(true);
+            if (!overText && !cursorVisible) {
+                cursorVisible = true;
+                setVisible(true);
+            }
+            scheduleTick();
         };
 
         const onOver = (e: PointerEvent) => {
@@ -52,12 +67,25 @@ export default function Cursor() {
             if (!t || !t.closest) return;
             overText = !!t.closest("input, textarea");
             if (overText) {
+                cursorVisible = false;
+                currentHover = false;
+                currentLabel = "";
                 setVisible(false);
+                setHover(false);
+                setLabel("");
                 return;
             }
             const el = t.closest<HTMLElement>("a, button, [data-cursor]");
-            setHover(!!el);
-            setLabel(el?.dataset.cursor ?? "");
+            const nextHover = !!el;
+            const nextLabel = el?.dataset.cursor ?? "";
+            if (nextHover !== currentHover) {
+                currentHover = nextHover;
+                setHover(nextHover);
+            }
+            if (nextLabel !== currentLabel) {
+                currentLabel = nextLabel;
+                setLabel(nextLabel);
+            }
         };
 
         const onDown = (e: PointerEvent) => {
@@ -68,14 +96,16 @@ export default function Cursor() {
             setTimeout(() => setStitches((s) => s.filter((i) => i.id !== id)), 700);
         };
         const onUp = () => setPressed(false);
-        const onLeave = () => setVisible(false);
+        const onLeave = () => {
+            cursorVisible = false;
+            setVisible(false);
+        };
 
         window.addEventListener("pointermove", onMove);
         window.addEventListener("pointerover", onOver);
         window.addEventListener("pointerdown", onDown);
         window.addEventListener("pointerup", onUp);
         root.addEventListener("pointerleave", onLeave);
-        raf = requestAnimationFrame(tick);
 
         return () => {
             cancelAnimationFrame(raf);

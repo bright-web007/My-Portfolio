@@ -1,84 +1,21 @@
-// import { create } from "zustand";
-// import { SKILLS } from "@/lib/Skills";
-
-// type Phase = "title" | "loading" | "playing";
-// type Section = "home" | "skills";
-// type Toast = { id: string; title: string; text: string; xp: number };
-
-// type GameState = {
-//   phase: Phase;
-//   section: Section;
-//   selected: string | null;
-//   xp: number;
-//   achievements: string[];
-//   toast: Toast | null;
-//   start: () => void;
-//   finishLoading: () => void;
-//   setSection: (s: Section) => void;
-//   select: (id: string | null) => void;
-//   addXp: (n: number) => void;
-//   unlock: (id: string, title: string, text: string, xp?: number) => void;
-//   clearToast: () => void;
-// };
-
-// export const useGame = create<GameState>((set, get) => ({
-//   phase: "title",
-//   section: "home",
-//   selected: null,
-//   xp: 0,
-//   achievements: [],
-//   toast: null,
-//   start: () => set({ phase: "loading" }),
-//   finishLoading: () => set({ phase: "playing" }),
-//   setSection: (s) => set({ section: s, selected: null }),
-//   select: (id) => {
-//     set({ selected: id });
-//     if (!id) return;
-//     const skill = SKILLS.find((s) => s.id === id);
-//     if (!skill) return;
-//     get().unlock(`skill-${id}`, "Knot Tied", `${skill.name} discovered.`, 20);
-//     const tied = get().achievements.filter((a) => a.startsWith("skill-")).length;
-//     if (tied === SKILLS.length) {
-//       setTimeout(
-//         () => get().unlock("master-weaver", "Master Weaver", "Every knot tied.", 100),
-//         1800
-//       );
-//     }
-//   },
-//   addXp: (n) => set((s) => ({ xp: s.xp + n })),
-//   unlock: (id, title, text, xp = 50) => {
-//     if (get().achievements.includes(id)) return;
-//     set((s) => ({
-//       achievements: [...s.achievements, id],
-//       xp: s.xp + xp,
-//       toast: { id, title, text, xp },
-//     }));
-//   },
-//   clearToast: () => set({ toast: null }),
-// }));
-
-
-
-
 import { create } from "zustand";
 import { CATEGORIES, ALL_SKILLS } from "@/lib/Skills";
+import { PROJECTS } from "@/lib/Projects";
 
-type Phase = "title" | "loading" | "playing";
-type Section = "home" | "skills";
+export type Section = "home" | "skills" | "projects" | "contact";
 type Toast = { id: string; title: string; text: string; xp: number };
 
 type GameState = {
-  phase: Phase;
   section: Section;
   category: string | null;
   selected: string | null;
   hoverLabel: string | null;
   xp: number;
   achievements: string[];
+  inspectedProjects: string[];
   toast: Toast | null;
-  start: () => void;
-  finishLoading: () => void;
   setSection: (s: Section) => void;
+  inspectProject: (id: string) => void;
   openCategory: (id: string | null) => void;
   select: (id: string | null) => void;
   back: () => void;
@@ -89,18 +26,42 @@ type GameState = {
 };
 
 export const useGame = create<GameState>((set, get) => ({
-  phase: "title",
   section: "home",
   category: null,
   selected: null,
   hoverLabel: null,
   xp: 0,
   achievements: [],
+  inspectedProjects: [],
   toast: null,
-  start: () => set({ phase: "loading" }),
-  finishLoading: () => set({ phase: "playing" }),
   setSection: (s) =>
     set({ section: s, category: null, selected: null, hoverLabel: null }),
+  inspectProject: (id) => {
+    const { inspectedProjects } = get();
+    if (inspectedProjects.includes(id)) return;
+
+    const inspected = [...inspectedProjects, id];
+    set({ inspectedProjects: inspected });
+    get().unlock(
+      `project-${id}`,
+      "Item Inspected",
+      "A new inventory item has been inspected.",
+      30
+    );
+
+    if (PROJECTS.every((project) => inspected.includes(project.id))) {
+      setTimeout(
+        () =>
+          get().unlock(
+            "project-collector",
+            "Collector",
+            "Every project item has been inspected.",
+            0
+          ),
+        1400
+      );
+    }
+  },
   openCategory: (id) => set({ category: id, selected: null }),
   select: (id) => {
     set({ selected: id });
@@ -109,7 +70,12 @@ export const useGame = create<GameState>((set, get) => ({
     const skill = ALL_SKILLS.find((s) => s.id === id);
     if (!cat || !skill) return;
 
-    get().unlock(`skill-${id}`, "Knot Tied", `${skill.name} discovered.`, 20);
+    get().unlock(
+      `skill-${id}`,
+      "Skill Explored",
+      `You learned about ${skill.name}.`,
+      20
+    );
 
     const has = (sid: string) => get().achievements.includes(`skill-${sid}`);
     const catDone = cat.skills.every((s) => has(s.id));
@@ -119,8 +85,8 @@ export const useGame = create<GameState>((set, get) => ({
         () =>
           get().unlock(
             `thread-${cat.id}`,
-            `${cat.name} Thread Complete`,
-            "Every knot in this area is tied.",
+            `${cat.name} Complete`,
+            "You explored every skill in this area.",
             60
           ),
         1800
@@ -128,7 +94,13 @@ export const useGame = create<GameState>((set, get) => ({
     }
     if (allDone) {
       setTimeout(
-        () => get().unlock("master-weaver", "Master Weaver", "Every knot tied.", 100),
+        () =>
+          get().unlock(
+            "master-weaver",
+            "Master Explorer",
+            "You explored every skill.",
+            100
+          ),
         catDone ? 5800 : 1800
       );
     }

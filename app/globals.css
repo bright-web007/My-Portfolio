@@ -1,8 +1,40 @@
 @import "tailwindcss";
+@import "react-phone-number-input/style.css";
 
 body {
   background: #05080d;
   color: #eaf0f2;
+}
+
+.phone-input {
+  display: flex;
+  min-height: 3rem;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgb(255 255 255 / 20%);
+  background: rgb(5 8 13 / 80%);
+  padding-inline: 0.75rem;
+}
+
+.phone-input:focus-within {
+  border-color: #2ee6a6;
+  box-shadow: 0 0 0 2px rgb(46 230 166 / 25%);
+}
+
+.phone-input .PhoneInputCountrySelect {
+  color: #eaf0f2;
+  background-color: #05080d;
+}
+
+.phone-input .PhoneInputInput {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #eaf0f2;
+  font: inherit;
 }
 
 /* Custom cursor: only applied once Cursor.tsx has loaded */
@@ -27,5 +59,50 @@ html.has-cursor textarea {
   to {
     opacity: 0;
     transform: translate(-50%, -50%) scale(1.7) rotate(45deg);
+  }
+}
+
+.project-atmosphere {
+  isolation: isolate;
+}
+
+.project-atmosphere::before,
+.project-atmosphere::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.project-atmosphere::before {
+  inset: -18%;
+  background:
+    radial-gradient(ellipse at 20% 24%, rgb(255 184 74 / 11%), transparent 34%),
+    radial-gradient(ellipse at 78% 30%, rgb(46 230 166 / 9%), transparent 38%),
+    radial-gradient(ellipse at 62% 82%, rgb(255 90 54 / 8%), transparent 36%);
+  filter: blur(72px);
+  animation: raffia-drift 32s ease-in-out infinite alternate;
+}
+
+.project-atmosphere::after {
+  background-image:
+    repeating-linear-gradient(0deg, rgb(255 255 255 / 2%) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 1.5%) 0 1px, transparent 1px 9px);
+  opacity: 0.45;
+}
+
+@keyframes raffia-drift {
+  from {
+    transform: translate3d(-2%, -1%, 0) rotate(-2deg) scale(1);
+  }
+  to {
+    transform: translate3d(2%, 1%, 0) rotate(2deg) scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-atmosphere::before {
+    animation: none;
   }
 }
