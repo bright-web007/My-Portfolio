@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Williams Uwana Udeme | Portfolio
 
-## Getting Started
+A personal portfolio for Williams Uwana Udeme, a Front-End Engineer who builds fast, accessible and polished web experiences with React, Next.js and TypeScript.
 
-First, run the development server:
+**Live site:** [my-portfolio-seven-beta-39.vercel.app](https://my-portfolio-seven-beta-39.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+<!-- Add a screenshot or GIF of the site here, for example:
+![Portfolio preview](public/preview.png)
+-->
+
+## What's inside
+
+- **Home:** an introduction with a link to download my resume.
+- **About:** who I am and how I like to build.
+- **Skills:** the tools and technologies I work with.
+- **Experience:** my work as a Front-End Engineer at Wazobia Technologies.
+- **Projects:** 9 selected projects with screenshots, tech stacks and links to the live sites.
+- **Contact:** email, phone and social links.
+- Smooth animation and interactive 3D visuals.
+- Responsive layout for phones, tablets and desktops.
+
+## Tech stack
+
+| Area | Tools |
+| --- | --- |
+| Framework | Next.js 16 (App Router), React 19 |
+| Language | TypeScript |
+| Styling | Tailwind CSS 4 |
+| 3D | Three.js, React Three Fiber, drei, postprocessing |
+| Animation | GSAP, Framer Motion |
+| State | Zustand |
+| Icons | react-icons |
+| Hosting | Vercel |
+
+## Project structure
+
+```
+app/         Routes, layout and global styles
+components/  UI sections and the 3D scene
+lib/         Shared data and helpers
+public/      Static assets (images, resume)
+store/       Zustand state
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Getting started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You need [Node.js](https://nodejs.org) 20 or later.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# 1. Clone the repository
+git clone https://github.com/bright-web007/My-Portfolio.git
 
-## Learn More
+# 2. Move into the project
+cd My-Portfolio
 
-To learn more about Next.js, take a look at the following resources:
+# 3. Install dependencies
+npm install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 4. Start the development server
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Deploy on Vercel
+### Available scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Starts the development server |
+| `npm run build` | Creates a production build |
+| `npm run start` | Runs the production build |
+| `npm run lint` | Checks the code with ESLint |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Testing on your phone
+
+If you open the dev server on another device on your network, Next.js blocks the request by default. Add your computer's address to `next.config.ts`:
+
+```ts
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  allowedDevOrigins: ["YOUR-LOCAL-IP"], // for example "192.168.1.23"
+};
+
+export default nextConfig;
+```
+
+Restart the server, then open `http://YOUR-LOCAL-IP:3000` on your phone.
+
+## Deployment
+
+The site is deployed on [Vercel](https://vercel.com). Every push to the `main` branch triggers a new deployment.
+
+## Contact
+
+- **Email:** brightwilliams22222@gmail.com
+- **GitHub:** [bright-web007](https://github.com/bright-web007)
+- **LinkedIn:** [bright-williams](https://www.linkedin.com/in/bright-williams-16407238a/)
+
+If you like the project, a star on the repository is always appreciated. ⭐
