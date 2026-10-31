@@ -13,10 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Williams Uwana Udeme | Web Developer",
+  title: "Williams Uwana Udeme | Front-End Developer",
   description:
-    "A portfolio you can play. Explore Raffia City to see what I build.",
+    "Front-end developer building fast, accessible web experiences with React, Next.js and TypeScript.",
 };
+
 export const viewport: Viewport = {
   themeColor: "#05080d",
 };
